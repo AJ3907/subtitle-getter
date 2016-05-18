@@ -39,9 +39,8 @@ def get_movie_info(release_name):
 	return info
 
 
-#filepath=raw_input("Enter your filepath: ")
-#filepath="C:\Users\goldy_torres\Downloads\Compressed\Spotlight (2015) [YTS.AG]\Spotlight.2015.720p.BluRay.x264-[YTS.AG].mp4"
-filepath="F:\\tv\How i met your mother\season 6\How I Met Your Mother S06E19- Legendaddy[achilles].avi"
+filepath=raw_input("Enter your filepath: ")
+
 dirpath=""
 filename=""
 j=0
@@ -80,6 +79,8 @@ for td in tr:
 
 		if(file_info['name']==movie_info['name']):
 			score+=1
+		else:
+			score=-3
 		if(file_info['season']==movie_info['season']):
 			#need to handle season number and episode number...too lazy
 			score+=1
@@ -91,6 +92,12 @@ for td in tr:
 		if(score>max_score):
 			max_score=score
 			href=td.find('a').get("href").strip()
+
+if(max_score==0):
+	print("NOT FOUND")
+	exit()
+
+print ("SUBTITLES FOUND")
 
 subtitle_url="http://subscene.com"+href
 response=get(subtitle_url)
@@ -104,6 +111,7 @@ with open(dirpath+filename+".zip","wb") as file:
 	file.write(response.content)
 file.close()
 
+print ("ZIP DOWNLOADED")
 zfile = zipfile.ZipFile(dirpath+filename+".zip","r")
 subtitle_file_name=zfile.namelist()[0]
 zfile.extractall(dirpath)
